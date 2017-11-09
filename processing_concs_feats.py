@@ -14,12 +14,12 @@ def train(source = sentences):
 	model=word2vec.Word2Vec(sentences,size=200, window=5, min_count=5, workers=4)
 	return model 
 
-nouns = ['airplane', 'queen', 'tiger', 'dentist', 'candy', 'mirror', 'fuzz']
-adjectives = ['fast', 'regal', 'dangerous', 'scary', 'sweet', 'shiny', 'fuzzy']
-synonyms = [['speedy', 'quick'], ['important', 'royal'],
+nouns = ['genocide', 'airplane', 'queen', 'tiger', 'ghost', 'chocolate', 'mirror', 'fuzz', 'apple']
+adjectives = ['tragic', 'fast', 'regal', 'dangerous', 'scary', 'sweet', 'shiny', 'fuzzy', 'red']
+synonyms = [['sad', 'horrific'], ['speedy', 'quick'], ['important', 'royal'],
             ['unsafe', 'risky'], ['spooky', 'frightening'],
             ['sugary', 'nice'], ['bright', 'glossy'],
-            ['furry', 'hairy']]
+            ['furry', 'hairy'], []]
 
 
 def compute_score_noun(model, noun, adjective, base_data):
