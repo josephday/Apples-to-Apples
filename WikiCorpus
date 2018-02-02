@@ -1,0 +1,2 @@
+from gensim.corpora import WikiCorpus
+import logging
