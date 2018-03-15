@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+import csv
 
 def process_noun(noun):
 	noun = noun.text
@@ -10,14 +11,18 @@ def process_noun(noun):
 
 def process_adjective(adjective):
 	synonyms = adjective.next_sibling
+	#print(synonyms)
 	adjective = adjective.text
+	adjective = adjective.replace(" ", "_")
 	if "&" in adjective:
 		return
 	else:
 		pass
 	#synonyms = adjective.next_sibling
-	synonyms = re.findall("[a-zA-Z]*", synonyms)
-	synonyms = [synonym for synonym in synonyms if synonym != '']
+	#synonyms = [synonym.replace(' ', '_') for synonym in synonyms]
+	synonyms = re.findall("[a-zA-Z_\-.\']*", synonyms)
+	forbidden = ['','-', 'Party', 'Set', 'set', 'party']
+	synonyms = [synonym for synonym in synonyms if synonym not in forbidden]
 	return [adjective] + synonyms
 
 
@@ -33,6 +38,14 @@ adj_r = requests.get(adj_url)
 adj_data = adj_r.text
 adj_soup = BeautifulSoup(adj_data, "html5lib") 
 adjectives = adj_soup.find_all('b')
+adjectives = list(set(adjectives))
 adjectives = [process_adjective(adj) for adj in adjectives if process_adjective(adj) is not None]
 
+with open("nouns.csv",'w') as resultFile:
+    wr = csv.writer(resultFile, dialect='excel')
+    wr.writerow(nouns)
+
+with open("adjectives.csv",'w') as resultFile:
+    wr = csv.writer(resultFile, dialect='excel')
+    wr.writerow(adjectives)
 
