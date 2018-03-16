@@ -7,7 +7,7 @@ def process_noun(noun):
 	noun = noun.text
 	noun = noun.replace("&", "and")
 	noun = noun.replace(" ", "_")
-	return noun
+	return noun.lower()
 
 def process_adjective(adjective):
 	synonyms = adjective.next_sibling
@@ -22,8 +22,8 @@ def process_adjective(adjective):
 	#synonyms = [synonym.replace(' ', '_') for synonym in synonyms]
 	synonyms = re.findall("[a-zA-Z_\-.\']*", synonyms)
 	forbidden = ['','-', 'Party', 'Set', 'set', 'party']
-	synonyms = [synonym for synonym in synonyms if synonym not in forbidden]
-	return [adjective] + synonyms
+	synonyms = [synonym.lower() for synonym in synonyms if synonym not in forbidden]
+	return [adjective.lower()] + synonyms
 
 
 nouns_url = "www.com-www.com/applestoapples/applestoapples-red-without.html"
