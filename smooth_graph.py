@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 import itertools as it
+import random
 
 def process_hand(hand):
 	hand = hand.replace("\'", "")
@@ -117,15 +118,30 @@ def evaluate_model(model, nlist, hands, adjectives, true_answers, savefig, saved
 		except:
 			print(hands[i], adjectives[i])
 			failed+=1
+
+	dmean = np.mean(discard)
+	kmean = np.mean(keep)
+	print("Mean score when kept is {}".format(kmean))
+	print("Mean score when discarded is {}".format(dmean))
+
+	smooth_keep = []
+	for value in keep:
+		smooth_keep += np.random.normal(value, 0.01, 10).tolist()
+
+	smooth_discard = []
+	for value in discard:
+		smooth_discard += np.random.normal(value,0.01,10).tolist()
+
+
 	print("times failed: {}".format(failed))
 	print("When 1 correct, got it {} times out of {} for {} percent".format(correct_1, out_of_1, float(correct_1) / out_of_1))
 	print("When 2 correct, got it {} times out of {} for {} percent".format(correct_2, out_of_2, float(correct_2) / out_of_2))
 	print("When 3 correct, got it {} times out of {} for {} percent".format(correct_3, out_of_3, float(correct_3) / out_of_3))
 	print("When 4 correct, got it {} times out of {} for {} percent".format(correct_4, out_of_4, float(correct_4) / out_of_4))
-	plt.hist(discard, bins=40, alpha=0.5, label='discard')
-	plt.hist(keep, bins=40, alpha=0.5, label='keep')
+	plt.hist(smooth_discard, bins=100, alpha=0.5, label='discard')
+	plt.hist(smooth_keep, bins=100, alpha=0.5, label='keep')
 	plt.legend(loc='upper right')
-	plt.savefig(savefig)
+	plt.savefig('smoothed.png')
 	plt.gcf().clear()
 	acc = float(correct) / out_of
 	acc1 = float(correct_1) / out_of_1
@@ -133,9 +149,9 @@ def evaluate_model(model, nlist, hands, adjectives, true_answers, savefig, saved
 	acc3 = float(correct_3) / out_of_3
 	acc4 = float(correct_4) / out_of_4
 	to_save = [savefig, acc, acc1, acc2, acc3, acc4, failed]
-	with open(savedata,'a') as resultFile:
-		wr = csv.writer(resultFile, dialect='excel')
-		wr.writerow(to_save)
+	#with open(savedata,'a') as resultFile:
+#		wr = csv.writer(resultFile, dialect='excel')
+#		wr.writerow(to_save)
 
 def one_trial(nouns, hands, adjectives, true_answers, train_params, savedata):
 	size = train_params[0]

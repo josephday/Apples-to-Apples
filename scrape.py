@@ -7,6 +7,7 @@ def process_noun(noun):
 	noun = noun.text
 	noun = noun.replace("&", "and")
 	noun = noun.replace(" ", "_")
+	noun = noun.replace("\'", "")
 	return noun.lower()
 
 def process_adjective(adjective):
